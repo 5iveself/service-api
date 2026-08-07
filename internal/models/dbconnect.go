@@ -30,5 +30,5 @@ func ConnectDB() {
 		panic(err)
 	}
 
-	DB.AutoMigrate(&Service{}, &User{}, &UserService{})
+	DB.AutoMigrate(&Service{}, &UserService{})
 }
