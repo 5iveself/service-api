@@ -3,36 +3,29 @@ package database
 import (
 	"fmt"
 	"os"
+	"service-api/internal/models"
 
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 
-func init() {
-	efile := godotenv.Load()
-	if efile != nil {
-		fmt.Print(efile)
-	}
-
-	username := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
+func ConnectDB() *gorm.DB {
+	dbUsername := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", dbHost, username, password, dbPort, dbName)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable", dbHost, dbUsername, dbPassword, dbName)
 
-	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn))
 	if err != nil {
-		fmt.Print(err)
+		panic(err)
 	}
 
-	db = conn
-}
+	db.AutoMigrate(&models.Service{}, &models.User{}, &models.UserService{})
 
-func GetDB() *gorm.DB {
 	return db
 }
