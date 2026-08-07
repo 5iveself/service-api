@@ -26,6 +26,17 @@ func GetAllUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"users": users})
 }
 
+func GetUser(ctx *gin.Context) {
+	var user models.User
+
+	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&user).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"user": user})
+}
+
 func CreateUser(ctx *gin.Context) {
 	var validate CreateUserValidate
 	if err := ctx.ShouldBindJSON(&validate); err != nil {
