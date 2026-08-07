@@ -61,7 +61,7 @@ func GetUserServices(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Success!"})
+	ctx.JSON(http.StatusOK, gin.H{"service": response})
 }
 
 // CreateUserService godoc
@@ -84,7 +84,7 @@ func CreateUserService(ctx *gin.Context) {
 	userService := models.UserService{ServiceID: validate.ServiceID, UserID: validate.UserID, StartDate: validate.StartDate, ExpDate: validate.ExpDate}
 	models.DB.Create(&userService)
 
-	ctx.JSON(http.StatusOK, gin.H{"user-service": userService})
+	ctx.JSON(http.StatusOK, gin.H{"user-service": "create-succeess!"})
 }
 
 // DeleteUserService godoc
