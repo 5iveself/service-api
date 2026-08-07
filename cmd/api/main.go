@@ -1,8 +1,8 @@
 package main
 
 import (
-	"net/http"
-	"service-api/internal/database"
+	"service-api/internal/controllers"
+	"service-api/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,11 +10,9 @@ import (
 func main() {
 	route := gin.Default()
 
-	database.ConnectDB()
+	models.ConnectDB()
 
-	route.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"message": "Test!"})
-	})
+	route.GET("/users", controllers.GetAllUsers)
 
 	route.Run()
 }
