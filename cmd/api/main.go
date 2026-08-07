@@ -18,5 +18,11 @@ func main() {
 	route.PATCH("/users/:id", controllers.UpdateUser)
 	route.DELETE("/user/:id", controllers.DeleteUser)
 
+	route.GET("/services", controllers.GetAllServices)
+	route.GET("/service/:id", controllers.GetService)
+	route.POST("/service", controllers.CreateService)
+	route.PATCH("/services/:id", controllers.UpdateService)
+	route.DELETE("/service/:id", controllers.DeleteService)
+
 	route.Run()
 }
