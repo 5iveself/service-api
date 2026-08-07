@@ -1,0 +1,311 @@
+basePath: /
+definitions:
+  controllers.CreateServiceValidate:
+    properties:
+      price:
+        type: integer
+      title:
+        type: string
+    required:
+    - price
+    - title
+    type: object
+  controllers.CreateUserServiceValidate:
+    properties:
+      exp_date:
+        type: string
+      service_id:
+        type: integer
+      start_date:
+        type: string
+      user_id:
+        type: string
+    required:
+    - exp_date
+    - service_id
+    - start_date
+    - user_id
+    type: object
+  controllers.ServiceResponse:
+    properties:
+      id:
+        type: integer
+      price:
+        type: integer
+      title:
+        type: string
+    type: object
+  controllers.UpdateServiceValidate:
+    properties:
+      price:
+        type: integer
+      title:
+        type: string
+    type: object
+  controllers.UserServiceResponse:
+    properties:
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.Service:
+    properties:
+      id:
+        type: integer
+      price:
+        type: integer
+      title:
+        type: string
+    type: object
+  models.UserService:
+    properties:
+      expDate:
+        type: string
+      id:
+        type: integer
+      service:
+        $ref: '#/definitions/models.Service'
+      serviceID:
+        type: integer
+      startDate:
+        type: string
+      userID:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing services and user subscriptions.
+  title: Service API
+  version: "1.0"
+paths:
+  /service:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new service and returns it
+      parameters:
+      - description: Service data
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateServiceValidate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/controllers.ServiceResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new service
+      tags:
+      - services
+  /service/{id}:
+    delete:
+      description: Deletes a service by its ID
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a service
+      tags:
+      - services
+    get:
+      description: Returns a single service by its ID
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/controllers.ServiceResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a service by ID
+      tags:
+      - services
+  /services:
+    get:
+      description: Returns a list of all services
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/controllers.ServiceResponse'
+              type: array
+            type: object
+      summary: Get all services
+      tags:
+      - services
+  /services/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Updates an existing service by its ID
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Service data
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateServiceValidate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/controllers.ServiceResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a service
+      tags:
+      - services
+  /user-service:
+    get:
+      description: Returns the services subscribed by a user, optionally filtered
+        by user id or service name
+      parameters:
+      - description: Filter by user id
+        in: query
+        name: id
+        type: string
+      - description: Filter by service name (partial match)
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/controllers.UserServiceResponse'
+              type: array
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user services
+      tags:
+      - user-services
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user service subscription
+      parameters:
+      - description: Subscription data
+        in: body
+        name: userService
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateUserServiceValidate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/models.UserService'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Subscribe a user to a service
+      tags:
+      - user-services
+  /user-service/{id}:
+    delete:
+      description: Deletes a user service subscription by its ID
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a user service
+      tags:
+      - user-services
+swagger: "2.0"
