@@ -13,6 +13,7 @@ func main() {
 	models.ConnectDB()
 
 	route.GET("/users", controllers.GetAllUsers)
+	route.POST("/user", controllers.CreateUser)
 
 	route.Run()
 }
