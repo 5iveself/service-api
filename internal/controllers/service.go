@@ -25,7 +25,7 @@ func GetAllServices(ctx *gin.Context) {
 }
 
 func GetService(ctx *gin.Context) {
-	var user models.User
+	var user models.Service
 
 	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&user).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Service not found"})
@@ -56,7 +56,7 @@ func UpdateService(ctx *gin.Context) {
 		return
 	}
 
-	var validate UpdateUserValidate
+	var validate UpdateServiceValidate
 	if err := ctx.ShouldBindJSON(&validate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
