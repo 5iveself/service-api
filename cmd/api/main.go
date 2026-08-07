@@ -13,6 +13,7 @@ func main() {
 	models.ConnectDB()
 
 	route.GET("/users", controllers.GetAllUsers)
+	route.GET("/user/:id", controllers.GetUser)
 	route.POST("/user", controllers.CreateUser)
 	route.PATCH("/users/:id", controllers.UpdateUser)
 
