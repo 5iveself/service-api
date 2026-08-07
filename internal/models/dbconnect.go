@@ -1,18 +1,23 @@
-package database
+package models
 
 import (
 	"fmt"
 	"os"
-	"service-api/internal/models"
 
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
+var err error
 
-func ConnectDB() *gorm.DB {
+func ConnectDB() {
+	e := godotenv.Load("../../internal/config/.env")
+	if e != nil {
+		panic(e)
+	}
+
 	dbUsername := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
@@ -20,12 +25,10 @@ func ConnectDB() *gorm.DB {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable", dbHost, dbUsername, dbPassword, dbName)
 
-	db, err := gorm.Open(postgres.Open(dsn))
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	db.AutoMigrate(&models.Service{}, &models.User{}, &models.UserService{})
-
-	return db
+	DB.AutoMigrate(&Service{}, &User{}, &UserService{})
 }
