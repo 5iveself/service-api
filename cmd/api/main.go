@@ -14,6 +14,7 @@ func main() {
 
 	route.GET("/users", controllers.GetAllUsers)
 	route.POST("/user", controllers.CreateUser)
+	route.PATCH("/users/:id", controllers.UpdateUser)
 
 	route.Run()
 }
