@@ -1,13 +1,16 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type UserService struct {
-	UserID    uint
+	UserID    uuid.UUID
 	ServiceID uint
 	StartDate time.Time
 	ExpDate   time.Time
-
-	UserIDRef    User    `gorm:"foreignKey:Username;references:Username;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	ServiceIDRef Service `gorm:"foreignKey:ServiceName;references:ServiceName;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	User      User    `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
+	Service   Service `gorm:"foreignKey:ServiceID;references:ID;constraint:OnUpdate:CASCADE;OnDelete:CASCADE;"`
 }
